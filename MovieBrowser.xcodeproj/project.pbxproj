@@ -74,6 +74,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A0556AD2767A4CD00E250C0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				93FE107125E056C300F805CE /* Search */,
+				93C5866125E9EFFF00DBCE60 /* Detail */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		5AAF78282760FC6C007D0E67 /* Model Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -82,12 +91,12 @@
 			path = "Model Controller";
 			sourceTree = "<group>";
 		};
-		5AAF78322761C3B1007D0E67 /* Helper */ = {
+		5AAF78322761C3B1007D0E67 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				5A2B6EAB276300FF007071F0 /* DateHelper.swift */,
 			);
-			path = Helper;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		93305A662513D043004E869A = {
@@ -112,7 +121,6 @@
 			isa = PBXGroup;
 			children = (
 				93FE106D25E0557B00F805CE /* Source */,
-				5AAF78322761C3B1007D0E67 /* Helper */,
 				93FE106E25E0558600F805CE /* Resources */,
 			);
 			path = MovieBrowser;
@@ -165,11 +173,11 @@
 			isa = PBXGroup;
 			children = (
 				93FE106C25E0556500F805CE /* App */,
-				93FE107125E056C300F805CE /* Search */,
-				93C5866125E9EFFF00DBCE60 /* Detail */,
 				93BB63A62513E44300837DF4 /* Model */,
 				5AAF78282760FC6C007D0E67 /* Model Controller */,
+				5A0556AD2767A4CD00E250C0 /* Views */,
 				93C5866E25E9F2EE00DBCE60 /* Network */,
+				5AAF78322761C3B1007D0E67 /* Helpers */,
 			);
 			path = Source;
 			sourceTree = "<group>";
