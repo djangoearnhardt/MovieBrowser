@@ -23,7 +23,7 @@ class SearchResultTableViewCell: UITableViewCell {
         static let verticalMargin: CGFloat = 20
         static let titleVerticalMargin: CGFloat = 95
         static let smallMargin: CGFloat = 10
-        static let seperatorHeight: CGFloat = 1
+        static let separatorHeight: CGFloat = 1
     }
     
     let titleLabel: UILabel = {
@@ -49,7 +49,7 @@ class SearchResultTableViewCell: UITableViewCell {
         return label
     }()
     
-    let seperatorView: UIView = {
+    let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
         return view
@@ -73,11 +73,11 @@ class SearchResultTableViewCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(ratingLabel)
-        contentView.addSubview(seperatorView)
+        contentView.addSubview(separatorView)
     }
     
     func constructSubviewConstraints() {
-        let views = [titleLabel, releaseDateLabel, ratingLabel, seperatorView]
+        let views = [titleLabel, releaseDateLabel, ratingLabel, separatorView]
         
         views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
@@ -101,12 +101,12 @@ class SearchResultTableViewCell: UITableViewCell {
             ratingLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Layout.smallMargin)
         ])
         
-        // seperatorView
+        // separatorView
         NSLayoutConstraint.activate([
-            seperatorView.heightAnchor.constraint(equalToConstant: Layout.seperatorHeight),
-            seperatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            seperatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            seperatorView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            separatorView.heightAnchor.constraint(equalToConstant: Layout.separatorHeight),
+            separatorView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            separatorView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            separatorView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
