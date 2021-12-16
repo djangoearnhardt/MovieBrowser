@@ -13,9 +13,8 @@ class DetailView: UIView {
     // MARK: - View model
     var searchResultViewModel: SearchResultViewModel? {
         didSet {
-            updateLabels {
-                self.updatePoster()
-            }
+            updateLabels()
+            updatePoster()
         }
     }
     
@@ -116,39 +115,40 @@ class DetailView: UIView {
     }
     
     // MARK: - Helper Functions
-    func updateLabels(completion: @escaping () -> Void) {
+    func updateLabels() {
+        // Set title
         titleLabel.text = searchResultViewModel?.title
-        if let releaseDate = searchResultViewModel?.releaseDate {
+        
+        // Set releaseDate
+        if let releaseDate = searchResultViewModel?.releaseDate, !releaseDate.isEmpty {
             releaseDateLabel.text = "Release Date: \(String(describing: DateHelper.shared.monthDayYearWithSlashesFrom(releaseDate)))"
+        } else {
+            releaseDateLabel.text = "Release Date Unavailable"
         }
-        summaryLabel.text = searchResultViewModel?.summary
-        completion()
+        
+        // Set summary
+        if let summary = searchResultViewModel?.summary, !summary.isEmpty {
+            summaryLabel.text = searchResultViewModel?.summary
+        } else {
+            summaryLabel.text = "Summary Unavailable"
+        }
     }
     
     func updatePoster() {
-        if let imageData = imageDataFrom(posterPath: searchResultViewModel?.posterPath) {
-            // To simulate a slow connection, change `delay`'s value to 1.0 or greater
-            // This displays the placeholder image, until the poster data has loaded
-            let delay = 0.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                self.posterImageView.image = UIImage(data: imageData)
-                self.posterImageView.reloadInputViews()
+        // To simulate a slow connection, change `delay`'s value to 1.0 or greater
+        // This displays the placeholder image, until the poster data has loaded
+        let delay = 0.0
+        
+        FetchingController.shared.fetchPosterDataBy(searchResultViewModel?.posterPath) { result in
+            switch result {
+            case .success(let imageData):
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    self.posterImageView.image = UIImage(data: imageData)
+                    self.posterImageView.reloadInputViews()
+                }
+            case .failure(let error):
+                debugPrint(error)
             }
-        }
-    }
-    
-    func imageDataFrom(posterPath: String?) -> Data? {
-        if let posterPath = posterPath,
-           let posterURL = URL(string: Network.posterPathURL + posterPath) {
-            do {
-                let imageData = try Data(contentsOf: posterURL)
-                return imageData
-            } catch {
-                print("Error decoding poster: \(error)")
-                return nil
-            }
-        } else {
-            return nil
         }
     }
 }

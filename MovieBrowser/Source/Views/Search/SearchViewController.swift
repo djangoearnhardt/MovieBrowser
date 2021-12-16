@@ -28,6 +28,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView?
     
     // MARK: - Properties
+    private let activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     private let movieReuseID = "movieCell"
     
     // MARK: - Lifecycle
@@ -38,9 +39,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpNavBar()
-        setUpTableView()
-        setUpSearchBar()
+        setUp()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -54,25 +53,23 @@ class SearchViewController: UIViewController {
             return
         }
         self.view.endEditing(true)
-        searchMovie(by: searchText)
+        searchMovie(by: searchText) { error in
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+            if let error = error {
+                self.presentErrorAlert(error: error)
+            }
+        }
     }
     
     // MARK: - Helper Functions
-    func setUpTableView() {
-        guard let tableView = tableView else {
-            return
-        }
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: movieReuseID)
-        tableView.separatorStyle = .none
-    }
-    
-    func setUpSearchBar() {
-        guard let searchBar = searchBar else {
-            return
-        }
-        searchBar.delegate = self
+    func setUp() {
+        view.backgroundColor = .white
+        setUpNavBar()
+        setUpSearchBar()
+        setUpTableView()
+        setUpActivityIndicator()
     }
     
     func setUpNavBar() {
@@ -85,14 +82,43 @@ class SearchViewController: UIViewController {
         }
     }
     
-    func searchMovie(by title: String) {
-        SearchController.shared.fetchMovieBy(search: title) { result in
+    func setUpSearchBar() {
+        guard let searchBar = searchBar else {
+            return
+        }
+        searchBar.delegate = self
+    }
+    
+    func setUpTableView() {
+        guard let tableView = tableView else {
+            return
+        }
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: movieReuseID)
+        tableView.separatorStyle = .none
+    }
+    
+    func setUpActivityIndicator() {
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    func searchMovie(by title: String, completion: @escaping (Error?) -> Void) {
+        // Start activityIndicator
+        activityIndicator.startAnimating()
+        FetchingController.shared.fetchMovieBy(search: title) { result in
             switch result {
             case .failure(let error):
-                print(error)
+                completion(error)
             case .success(let movies):
                 let viewModels = movies.compactMap { SearchResultViewModel(movie: $0) }
                 self.searchResultViewModels = viewModels
+                completion(nil)
             }
         }
     }
@@ -113,6 +139,18 @@ class SearchViewController: UIViewController {
         let alertController = UIAlertController(
             title: "Oops",
             message: "Please enter a valid search, with more than one character.",
+            preferredStyle: .alert)
+        let soundsGoodAction = UIAlertAction(
+            title: "Ok",
+            style: .default)
+        alertController.addAction(soundsGoodAction)
+        present(alertController, animated: true)
+    }
+    
+    func presentErrorAlert(error: Error) {
+        let alertController = UIAlertController(
+            title: "Error fetching movie",
+            message: "\(error.localizedDescription)",
             preferredStyle: .alert)
         let soundsGoodAction = UIAlertAction(
             title: "Ok",
@@ -151,6 +189,13 @@ extension SearchViewController: UISearchBarDelegate {
             return
         }
         searchBar.resignFirstResponder()
-        searchMovie(by: searchText)
+        searchMovie(by: searchText) { error in
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+            if let error = error {
+                self.presentErrorAlert(error: error)
+            }
+        }
     }
 }

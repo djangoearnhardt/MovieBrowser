@@ -15,7 +15,7 @@ struct MovieJSON: Decodable {
 
 struct Movie: Decodable {
     let original_title: String
-    let overview: String
+    let overview: String?
     let release_date: String?
     let poster_path: String?
     let vote_average: Double

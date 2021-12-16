@@ -10,7 +10,7 @@ import Foundation
 
 struct SearchResultViewModel {
     let title: String
-    let summary: String
+    let summary: String?
     let releaseDate: String?
     let posterPath: String?
     let rating: String

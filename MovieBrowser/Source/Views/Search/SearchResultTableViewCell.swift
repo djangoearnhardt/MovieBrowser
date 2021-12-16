@@ -111,10 +111,17 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     func updateLabels() {
+        // Set title
         titleLabel.text = searchResultViewModel?.title
-        if let releaseDate = searchResultViewModel?.releaseDate {
+    
+        // Set releaseDate
+        if let releaseDate = searchResultViewModel?.releaseDate, !releaseDate.isEmpty {
             releaseDateLabel.text = DateHelper.shared.monthDayYearFrom(releaseDate)
+        } else {
+            releaseDateLabel.text = "Release Date Unavailable"
         }
+        
+        // Set rating
         ratingLabel.text = searchResultViewModel?.rating
     }
 }

@@ -1,5 +1,5 @@
 //
-//  SearchController.swift
+//  FetchingController.swift
 //  MovieBrowser
 //
 //  Created by Sam LoBue on 12/8/21.
@@ -8,13 +8,14 @@
 
 import Foundation
 
-class SearchController {
-    static let shared = SearchController()
+class FetchingController {
+    static let shared = FetchingController()
     private let urlSession = URLSession.shared
     private let apiKey = Network.apiKey
     
     func fetchMovieBy(search: String, completion: @escaping (Result<[Movie], Error>) -> Void) {
         guard let urlRequest = buildURLRequestFor(search: search) else {
+            completion(.failure(URLError.invalidURLRequest))
             return
         }
         let dataTask = urlSession.dataTask(with: urlRequest) { (data, _, error) in
@@ -26,6 +27,23 @@ class SearchController {
                 } catch {
                     completion(.failure(error))
                 }
+            }
+            
+            if let error = error {
+                completion(.failure(error))
+            }
+        }
+        dataTask.resume()
+    }
+    
+    func fetchPosterDataBy(_ posterPath: String?, completion: @escaping (Result<Data, Error>) -> Void) {
+        guard let posterPath = posterPath, let url = URL(string: Network.posterPathURL + posterPath) else {
+            completion(.failure(URLError.invalidPosterPath))
+            return
+        }
+        let dataTask = urlSession.dataTask(with: url) { (data, _, error) in
+            if let data = data {
+                completion(.success(data))
             }
             
             if let error = error {
