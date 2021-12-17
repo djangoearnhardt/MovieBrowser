@@ -19,7 +19,7 @@ class DateHelper {
     func monthDayYearFrom(_ dateString: String) -> String {
         dateFormatter.dateFormat = "yyyy-mm-dd"
         let date = dateFormatter.date(from: dateString)
-        dateFormatter.dateFormat = "MMMM dd, yyyy"
+        dateFormatter.dateFormat = "MMMM d, yyyy"
         if let date = date {
             let formattedString = dateFormatter.string(from: date)
             return formattedString
@@ -31,7 +31,7 @@ class DateHelper {
     func monthDayYearWithSlashesFrom(_ dateString: String) -> String {
         dateFormatter.dateFormat = "yyyy-mm-dd"
         let date = dateFormatter.date(from: dateString)
-        dateFormatter.dateFormat = "MM/dd/yy"
+        dateFormatter.dateFormat = "M/d/yy"
         if let date = date {
             let formattedString = dateFormatter.string(from: date)
             return formattedString
