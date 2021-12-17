@@ -111,6 +111,7 @@ class DetailView: UIView {
             summaryLabel.topAnchor.constraint(equalTo: posterImageView.topAnchor),
             summaryLabel.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: Layout.smallMargin),
             summaryLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -(Layout.smallMargin * 2)),
+            summaryLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     

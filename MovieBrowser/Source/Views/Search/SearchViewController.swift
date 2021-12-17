@@ -97,6 +97,7 @@ class SearchViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(SearchResultTableViewCell.self, forCellReuseIdentifier: movieReuseID)
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .onDrag
     }
     
     func setUpActivityIndicator() {

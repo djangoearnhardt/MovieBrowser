@@ -22,7 +22,7 @@ class FetchingController {
             if let data = data {
                 do {
                     let movieJSON = try JSONDecoder().decode(MovieJSON.self, from: data)
-                    let movies = movieJSON.results
+                    let movies = movieJSON.results?.sorted { $0.original_title < $1.original_title }
                     completion(.success(movies ?? []))
                 } catch {
                     completion(.failure(error))

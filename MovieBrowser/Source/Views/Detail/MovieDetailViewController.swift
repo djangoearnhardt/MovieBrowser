@@ -11,6 +11,7 @@ import UIKit
 class MovieDetailViewController: UIViewController {
     
     // MARK: - Properties
+    private let scrollView: UIScrollView = UIScrollView()
     private let detailView: DetailView = DetailView()
     
     enum Layout {
@@ -36,18 +37,30 @@ class MovieDetailViewController: UIViewController {
     }
     
     func constructSubviews() {
-        view.addSubview(detailView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(detailView)
     }
     
     func constructSubviewConstraints() {
-        detailView.translatesAutoresizingMaskIntoConstraints = false
+        let views = [scrollView, detailView]
+        
+        views.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        
+        // scrollView
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.verticalMargin),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
         
         // detailView
         NSLayoutConstraint.activate([
-            detailView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Layout.verticalMargin),
-            detailView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            detailView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            detailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            detailView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            detailView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            detailView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            detailView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            detailView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
 }
