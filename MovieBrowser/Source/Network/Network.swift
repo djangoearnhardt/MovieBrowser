@@ -9,6 +9,6 @@
 import UIKit
 
 class Network {
-    static let apiKey = "5885c445eab51c7004916b9c0313e2d3"
+    static let apiKey = ""
     static let posterPathURL = "https://image.tmdb.org/t/p/original/"
 }

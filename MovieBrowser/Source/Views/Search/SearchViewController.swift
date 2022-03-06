@@ -125,6 +125,7 @@ class SearchViewController: UIViewController {
     }
     
     func presentNoResultsAlert() {
+        print("OOPS: Need a valid API key from https://www.themoviedb.org")
         let alertController = UIAlertController(
             title: "Uh oh",
             message: "No movies found for that title. Try another search.",
